@@ -81,6 +81,17 @@ const UpcomingTestsList = ({
                     size="sm"
                     className="flex items-center gap-1"
                     title={test.hasReminder ? "Reminder set" : "Set reminder"}
+                    onClick={() => {
+                      const updatedTests = tests.map((t) =>
+                        t.id === test.id
+                          ? { ...t, hasReminder: !t.hasReminder }
+                          : t,
+                      );
+                      // In a real app, this would call an API to update the reminder status
+                      console.log(
+                        `Reminder ${!test.hasReminder ? "set" : "removed"} for test: ${test.title}`,
+                      );
+                    }}
                   >
                     <Bell className="h-3.5 w-3.5" />
                     {test.hasReminder ? "Reminder set" : "Set reminder"}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Bell, User, LogOut, Settings, Home } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface HeaderProps {
   userName?: string;
@@ -24,6 +25,18 @@ const Header = ({
   userAvatar = "",
   notifications = 3,
 }: HeaderProps) => {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login");
+  };
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
   return (
     <header className="w-full h-20 bg-background border-b border-border sticky top-0 z-50">
       <div className="container h-full mx-auto px-4 flex items-center justify-between">
@@ -33,37 +46,42 @@ const Header = ({
         </div>
 
         <nav className="hidden md:flex items-center space-x-6">
-          <Link
-            to="/"
+          <button
+            onClick={() => handleNavigation("/dashboard")}
             className="text-foreground hover:text-primary transition-colors"
           >
             <div className="flex items-center gap-1">
               <Home className="h-4 w-4" />
               <span>Dashboard</span>
             </div>
-          </Link>
-          <Link
-            to="/test-series"
+          </button>
+          <button
+            onClick={() => handleNavigation("/test-series")}
             className="text-foreground hover:text-primary transition-colors"
           >
             <div className="flex items-center gap-1">
               <BookOpen className="h-4 w-4" />
               <span>Test Series</span>
             </div>
-          </Link>
-          <Link
-            to="/progress"
+          </button>
+          <button
+            onClick={() => handleNavigation("/progress")}
             className="text-foreground hover:text-primary transition-colors"
           >
             <div className="flex items-center gap-1">
               <Settings className="h-4 w-4" />
               <span>My Progress</span>
             </div>
-          </Link>
+          </button>
         </nav>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="relative">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            onClick={() => handleNavigation("/notifications")}
+          >
             <Bell className="h-5 w-5" />
             {notifications > 0 && (
               <span className="absolute top-0 right-0 h-4 w-4 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center transform translate-x-1 -translate-y-1">
@@ -99,16 +117,16 @@ const Header = ({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleNavigation("/profile")}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleNavigation("/settings")}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Settings</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

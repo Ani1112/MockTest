@@ -78,6 +78,15 @@ export default function LoginForm() {
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
+          <div className="mt-2 text-center">
+            <Button
+              variant="link"
+              className="p-0"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </Button>
+          </div>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">

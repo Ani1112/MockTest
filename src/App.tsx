@@ -11,6 +11,14 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import React from "react";
 import routes from "tempo-routes";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import TestSeriesGrid from "./components/dashboard/TestSeriesGrid";
+import ProgressSummary from "./components/dashboard/ProgressSummary";
+import RecentTestResults from "./components/dashboard/RecentTestResults";
+import Layout from "./components/layout/Layout";
 
 function App() {
   return (
@@ -21,11 +29,72 @@ function App() {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <SettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notifications"
+              element={
+                <ProtectedRoute>
+                  <NotificationsPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute>
                   <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/test-series"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="container mx-auto px-4 py-8">
+                      <h1 className="text-3xl font-bold mb-8">Test Series</h1>
+                      <TestSeriesGrid />
+                    </div>
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/progress"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <div className="container mx-auto px-4 py-8">
+                      <h1 className="text-3xl font-bold mb-8">My Progress</h1>
+                      <div className="grid grid-cols-1 gap-6 mb-8">
+                        <ProgressSummary />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="md:col-span-2">
+                          <h2 className="text-2xl font-semibold mb-4">
+                            Recent Test Results
+                          </h2>
+                          <RecentTestResults maxItems={5} />
+                        </div>
+                      </div>
+                    </div>
+                  </Layout>
                 </ProtectedRoute>
               }
             />
@@ -60,7 +129,6 @@ function App() {
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
         </>
       </Suspense>
-      <div className="w-[800px] h-[600px]"></div>
     </AuthProvider>
   );
 }
